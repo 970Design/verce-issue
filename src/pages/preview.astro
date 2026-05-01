@@ -1,0 +1,20 @@
+---
+// The presence of `prerender = false` on any single page silently flips
+// the entire build into hybrid mode, even though `output: 'static'` is
+// set in astro.config.mjs. This is what triggers the multi-pass Vite
+// build (Server / Prerender / Client) whose hash tables fail to
+// reconcile for dynamic-import() URLs baked into chunk bodies.
+export const prerender = false;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Preview (server-rendered)</title>
+  </head>
+  <body>
+    <h1>Server-rendered page</h1>
+    <p>This page exists only to flip the build into hybrid mode.</p>
+  </body>
+</html>

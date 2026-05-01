@@ -1,0 +1,29 @@
+---
+import Sections from '../components/Sections.vue';
+
+const items = [
+  { name: 'Gallery', data: {} },
+  { name: 'BioCardGrid', data: {} },
+  { name: 'Itinerary', data: {} },
+  { name: 'MediaGalleryGrid', data: {} },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Astro 6 hybrid build hash mismatch repro</title>
+  </head>
+  <body>
+    <h1>Hybrid build hash mismatch repro</h1>
+    <p>
+      This page is prerendered. The Sections component below uses a
+      template-literal dynamic import that resolves to multiple section
+      components, each of which itself uses dynamic import of glightbox
+      at runtime.
+    </p>
+    <Sections items={items} client:only="vue" />
+  </body>
+</html>
