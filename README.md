@@ -6,8 +6,10 @@ Minimal reproduction for: **Astro 6 hybrid build emits dynamic-import URLs with 
 
 - `output: 'static'` + `adapter: vercel()`
 - A single page with `export const prerender = false` (`src/pages/preview.astro`) silently flips the build into hybrid mode (the build log will say `mode: "server"` even though `output` is `"static"`)
-- A prerendered page (`src/pages/index.astro`) loads a Vue `<Sections>` dispatcher that uses a template-literal dynamic import (`import(\`../sections/${name}.vue\`)`) to resolve to one of multiple section components
-- Each section component itself uses `await import('glightbox')` at runtime
+- A prerendered page (`src/pages/index.astro`) mounts `<Sections client:load />`. Mounting with `client:load` (not `client:only`) is important: it forces the Server, Prerender, and Client Vite passes to all process the same component graph
+- `Sections.vue` renders a `Section.vue` dispatcher per item. `Section.vue` uses a template-literal dynamic import (`import(\`../sections/${component}.vue\`)`) so Rollup expands it to a glob and emits a chunk per matching file
+- Each section component statically imports `glightbox/dist/css/glightbox.min.css` at the top, then uses `await import('glightbox')` at runtime — both shapes appear in the chunk graph
+- `MediaGalleryGrid.vue` adds a static top-level `import Hls from 'hls.js'` to widen the dependency graph
 - When deployed to Vercel, runtime `import()` URLs baked into the parent chunk bodies reference content hashes that the Client pass never emitted, producing 404s on `/_astro/<chunk>.<wrongHash>.js`
 
 ## Versions
@@ -18,6 +20,8 @@ Minimal reproduction for: **Astro 6 hybrid build emits dynamic-import URLs with 
 | @astrojs/vercel | 10.0.6 |
 | @astrojs/vue | 6.0.1 |
 | vue | 3.5.33 |
+| glightbox | 3.3.1 |
+| hls.js | 1.5.20 |
 | Node | 22.x |
 
 ## Steps to reproduce

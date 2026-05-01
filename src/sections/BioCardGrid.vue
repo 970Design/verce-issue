@@ -1,7 +1,8 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+import 'glightbox/dist/css/glightbox.min.css';
 
-defineProps({ data: Object });
+defineProps({ fields: Object, index: Number });
 
 const root = ref(null);
 

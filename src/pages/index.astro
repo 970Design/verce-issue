@@ -19,11 +19,14 @@ const items = [
   <body>
     <h1>Hybrid build hash mismatch repro</h1>
     <p>
-      This page is prerendered. The Sections component below uses a
-      template-literal dynamic import that resolves to multiple section
-      components, each of which itself uses dynamic import of glightbox
-      at runtime.
+      This page is prerendered. The Sections wrapper renders a
+      Section dispatcher that uses a template-literal dynamic import
+      to resolve to one of multiple section components. Each section
+      uses dynamic import of glightbox at runtime. Mounted with
+      <code>client:load</code> so the Server, Prerender and Client
+      Vite passes all process the components and can produce
+      divergent hash tables.
     </p>
-    <Sections items={items} client:only="vue" />
+    <Sections items={items} client:load />
   </body>
 </html>

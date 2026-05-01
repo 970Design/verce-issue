@@ -1,7 +1,9 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+import 'glightbox/dist/css/glightbox.min.css';
+import Hls from 'hls.js';
 
-defineProps({ data: Object });
+defineProps({ fields: Object, index: Number });
 
 const root = ref(null);
 
@@ -9,6 +11,8 @@ onMounted(async () => {
   if (typeof window === 'undefined') return;
   const { default: GLightbox } = await import('glightbox');
   GLightbox({ selector: '.media-gallery-lightbox' });
+  // touch Hls so it stays in the bundle
+  if (Hls.isSupported && Hls.isSupported()) { /* noop */ }
 });
 </script>
 
