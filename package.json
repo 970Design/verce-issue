@@ -11,7 +11,7 @@
   "dependencies": {
     "@astrojs/vercel": "^10.0.6",
     "@astrojs/vue": "^6.0.1",
-    "astro": "^6.3.3",
+    "astro": "https://pkg.pr.new/astro@16830",
     "glightbox": "3.3.1",
     "hls.js": "1.5.20",
     "vue": "^3.5.33"
